@@ -1,5 +1,6 @@
 package com.synq.service;
 
+import com.synq.enums.Provider;
 import com.synq.helpers.AppConstants;
 import com.synq.helpers.ResourceNotFoundException;
 import com.synq.entity.User;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 @Service
 public class UserServiceImpl implements  UserService{
     @Autowired
@@ -27,6 +27,7 @@ public class UserServiceImpl implements  UserService{
     public User saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoleList(List.of(AppConstants.ROLE_USER));
+        user.setProvider(Provider.SELF);
         logger.info(user.getProvider().toString());
         return userRepo.save(user);
     }
@@ -41,7 +42,10 @@ public class UserServiceImpl implements  UserService{
         User userOld = userRepo.findById(user.getId()).orElseThrow( ()-> new ResourceNotFoundException("User not found"));
         userOld.setName(user.getName());
         userOld.setEmail(user.getEmail());
-        userOld.setPassword(user.getPassword());
+        if(user.getPassword()!=null && !user.getPassword().isEmpty())
+        {
+            userOld.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         userOld.setAbout(user.getAbout());
         userOld.setPhoneNumber(user.getPhoneNumber());
         userOld.setProfilePic(user.getProfilePic());
@@ -74,5 +78,14 @@ public class UserServiceImpl implements  UserService{
     @Override
     public List<User> getAllUsers() {
         return userRepo.findAll();
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        Optional<User> optionalUser = userRepo.findByEmail(email);
+        if(optionalUser.isPresent())
+            return optionalUser.get();
+        else
+            return null;
     }
 }

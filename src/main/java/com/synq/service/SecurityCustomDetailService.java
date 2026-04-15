@@ -1,6 +1,9 @@
 package com.synq.service;
 
+import com.synq.entity.User;
 import com.synq.repository.UserRepo;
+import com.synq.config.UserDetailsImpl;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,9 +17,10 @@ public class SecurityCustomDetailService implements UserDetailsService {
     private UserRepo userRepo;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        return userRepo.findByEmail(username)
-                .orElseThrow(()-> new UsernameNotFoundException("User not found with this email "+username));
+        User user = userRepo.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+        return UserDetailsImpl.build(user);
     }
 }

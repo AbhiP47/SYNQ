@@ -18,6 +18,8 @@ public class SecurityConfig {
     private SecurityCustomDetailService userDetailService;
     @Autowired
     private OAuthenticationSuccessHandler handler;
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
     //Configuration of authentication provider
     @Bean
@@ -31,15 +33,25 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(authorize-> {
-            authorize.requestMatchers("/user/**").authenticated();
-            authorize.anyRequest().permitAll();
+        httpSecurity
+                .authorizeHttpRequests(authorize -> {
+                    authorize
+                            .requestMatchers("/login", "/register", "/oauth2/**", "/css/**", "/js/**", "/images/**")
+                            .permitAll();
+
+                    // Step 2: Define rules for specific roles (optional but good practice)
+                    authorize
+                            .requestMatchers("/admin/**").hasRole("ADMIN");
+
+                    // Step 3: Secure EVERYTHING ELSE. This is the "secure by default" rule.
+                    authorize
+                            .anyRequest().authenticated();
         });
         //form default login
         httpSecurity.formLogin(formLogin ->
                 formLogin.loginPage("/login")
                         .loginProcessingUrl("/authenticate")
-                        .defaultSuccessUrl("/user/dashboard",true)
+                        .successHandler(handler)
                         .failureUrl("/login?error=true")
                         .usernameParameter("email")
                         .passwordParameter("password")
@@ -53,6 +65,7 @@ public class SecurityConfig {
         // OAuth configuration
         httpSecurity.oauth2Login(oauth -> {
             oauth.loginPage("/login");
+            oauth.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService));
             oauth.successHandler(handler);
         });
 

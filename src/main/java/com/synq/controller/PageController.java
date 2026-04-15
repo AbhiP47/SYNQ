@@ -8,7 +8,6 @@ import com.synq.service.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -59,6 +58,7 @@ public class PageController {
         return "login";
     }
 
+    // this is the registration controller - for showing the view page
     @GetMapping("/register")
     public String register(Model model)
     {
@@ -67,6 +67,7 @@ public class PageController {
         return "register";
     }
 
+    // To process registration form
     @RequestMapping(value="/do-register", method= RequestMethod.POST)
     public String processRegister(@Valid @ModelAttribute UserForm userForm , BindingResult bindingResult , HttpSession session )  // Data Binding
     {
