@@ -6,27 +6,33 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />
+    <!-- Use standard th:href for internal CSS -->
+    <link rel="stylesheet" th:href="@{/css/output.css}" />
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title data-th-replace="${title}">
-        synq
-    </title>
+    <title data-th-replace="${title}">synq</title>
 </head>
 <body class="dark:bg-gray-800 dark:text-white bg-gray-100">
-<div data-th-replace="navbar :: navbar">
 
-</div>
-<div class="p-4 ">
-    <section data-th-replace="${content}">
-    </section>
-</div>
-<!--<footer class="p-4">-->
-<!--    Footer: This is SYNQ-->
-<!--</footer>-->
+<!-- Header Section -->
+<header>
+    <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/user_navbar::user-navbar}"></div>
+    </div>
+    <div th:unless="${loggedInUser}">
+        <div data-th-replace="~{navbar :: navbar}"></div>
+    </div>
+</header>
+
+
+
+<!-- Main Content Area -->
+<main>
+    <section data-th-replace="${content}"></section>
+</main>
+
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 <script data-th-src="@{'/js/script.js'}"></script>
-<th:block data-th-replace = "${script}"></th:block>
-
+<th:block data-th-replace="${script}"></th:block>
 </body>
 </html>

@@ -2,10 +2,17 @@
 <html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
       xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>User Profile</title>
+    <title th:text="${loggedInUser != null ? loggedInUser.name + 's Profile' : 'User Profile'}">
+        User Profile
+    </title>
 </head>
 <body>
-<div id="content">
+<div id="content" >
+<!-- Sidebar Section -->
+<aside th:if="${loggedInUser}">
+    <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+</aside>
+<div class="p-4 sm:ml-64 mt-20">
     <div class="block max-w-2xl p-8 mx-auto bg-white border rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-white">
             User Profile
@@ -30,6 +37,7 @@
         </div>
 
     </div>
+</div>
 </div>
 
 <script>
