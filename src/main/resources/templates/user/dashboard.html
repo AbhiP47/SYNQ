@@ -1,47 +1,36 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+<html
+        lang="en"
+        th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+        xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title th:text="${loggedInUser != null ? loggedInUser.name + 's Dashboard' : 'User Dashboard'}">
-        User Dashboard
+    <title data-th-text="${loggedInUser.name}+' |  Dashboard'">
+        Profile Page
     </title>
 </head>
 <body>
-<div id="content" >
-    <!-- Sidebar Section -->
-    <aside th:if="${loggedInUser}">
+<div id="content">
+    <!-- sidebar -->
+
+    <!-- user is logged in : sidebar -->
+
+    <div th:if="${loggedInUser}">
         <div data-th-replace="~{user/sidebar :: sidebar}"></div>
-    </aside>
-    <div class="p-4 sm:ml-64 mt-20">
-        <div class="block max-w-2xl p-8 mx-auto bg-white border rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-white">
-                User Dashboard
-            </h1>
+    </div>
 
-            <div th:if="${user}" class="mt-8 text-center">
-
-                <img th:src="${user.profilePic}" alt="User Profile Picture" class="w-32 h-32 mx-auto rounded-full shadow-lg mb-4 border-4 border-blue-500">
-
-                <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200" th:text="${user.name}">
-                    Abhinav Panwar
-                </h2>
-
-                <p class="text-lg text-gray-500 dark:text-gray-400" th:text="${user.email}">
-                    abhinav@example.com
-                </p>
-
-            </div>
-
-            <div th:unless="${user}" class="mt-8 text-center">
-                <p class="text-red-500">Could not load user information.</p>
-            </div>
-
+    <div class="sm:pl-64 pt-20" style="height: 1000px">
+        <div class="flex justify-center flex-col items-center">
+            <h1 class="text-5xl">Welcome to Dashbaord page</h1>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Consequatur, ratione!
+            </p>
         </div>
     </div>
 </div>
 
 <script>
-    console.log("User dashboard page loaded");
+    console.log("this is profile page");
 </script>
 </body>
 </html>
