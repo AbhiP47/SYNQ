@@ -1,10 +1,11 @@
-package com.synq.service;
+package com.synq.service.serviceImplementation;
 
 import com.synq.enums.Provider;
 import com.synq.helpers.AppConstants;
 import com.synq.helpers.ResourceNotFoundException;
 import com.synq.entity.User;
 import com.synq.repository.UserRepo;
+import com.synq.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 @Service
-public class UserServiceImpl implements  UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
 

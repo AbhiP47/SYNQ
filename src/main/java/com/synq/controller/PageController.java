@@ -4,7 +4,7 @@ import com.synq.entity.User;
 import com.synq.enums.MessageType;
 import com.synq.forms.UserForm;
 import com.synq.helpers.Message;
-import com.synq.service.UserServiceImpl;
+import com.synq.service.serviceImplementation.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.synq.service;
+package com.synq.service.serviceImplementation;
 
 import com.synq.entity.User;
 import com.synq.repository.UserRepo;
