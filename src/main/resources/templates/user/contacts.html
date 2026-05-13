@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${loggedInUser.name} + ' | Dashboard'">Dashboard</title>
+</head>
+<body>
+<div id="content">
+    <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+    </div>
+
+    <div class="sm:pl-64 pt-20 px-4">
+        <div class="flex flex-col items-center">
+            <h1 class="text-4xl font-bold dark:text-white mb-2">All Your Contacts</h1>
+            <p class="text-gray-500 dark:text-gray-400 mb-6">
+                Manage and search through your cloud-synced contacts.
+            </p>
+
+            <div class="w-full max-w-screen-xl bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-t-xl shadow-sm">
+                <div class="flex flex-col md:flex-row items-center justify-between p-4 space-y-4 md:space-y-0">
+                    <form
+                            data-th-object="${contactSearchForm}"
+                            data-th-action="@{'/user/contacts/search'}"
+                            method="get"
+                            class="flex flex-wrap items-center gap-3"
+                    >
+                        <div class="min-w-[140px]">
+                            <select
+                                    data-th-field="*{field}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            >
+                                <option value="" selected>Select Field</option>
+                                <option value="name">Name</option>
+                                <option value="phone">Phone</option>
+                                <option value="email">Email</option>
+                            </select>
+                        </div>
+
+                        <div class="relative w-full md:w-80">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                            </div>
+                            <input
+                                    data-th-field="*{value}"
+                                    type="text"
+                                    class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    placeholder="Search for contacts..."
+                            />
+                        </div>
+
+                        <button
+                                type="submit"
+                                class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition"
+                        >
+                            Search
+                        </button>
+                    </form>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Name</th>
+                            <th scope="col" class="px-6 py-3">Phone</th>
+                            <th scope="col" class="px-6 py-3">Links</th>
+                            <th scope="col" class="px-6 py-3 text-center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c : ${contacts}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                <img
+                                        class="w-10 h-10 rounded-full object-cover"
+                                        data-th-src="${c.picture}"
+                                        onerror="this.onerror=null;this.src='/images/default-user.png';"
+                                        alt="Contact Image"
+                                />
+                                <div class="ps-3">
+                                    <div class="text-base font-semibold" th:text="${c.name}">Name</div>
+                                    <div class="font-normal text-gray-400" th:text="${c.email}">email@example.com</div>
+                                </div>
+                            </th>
+                            <td class="px-6 py-4" th:text="${c.phoneNumber}">9876543210</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <a th:href="${c.websiteLink}" target="_blank" class="hover:text-blue-500"><i class="fa-solid fa-link"></i></a>
+                                    <a th:href="${c.linkedIn}" target="_blank" class="hover:text-blue-500"><i class="fa-brands fa-linkedin"></i></a>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(contacts)}">
+                            <td colspan="4" class="text-center py-10 text-gray-400">
+                                No contacts found. Start by adding some!
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    console.log("Contacts Dashboard Initialized.");
+</script>
+</body>
+</html>

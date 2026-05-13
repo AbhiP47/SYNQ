@@ -1,6 +1,7 @@
 package com.synq.service.serviceImplementation;
 
 import com.synq.entity.Contact;
+import com.synq.entity.User;
 import com.synq.helpers.ResourceNotFoundException;
 import com.synq.repository.ContactRepo;
 import com.synq.service.ContactService;
@@ -20,6 +21,7 @@ public class ContactServiceImpl implements ContactService {
     public Contact save(Contact contact) {
         String contactId = UUID.randomUUID().toString();
         contact.setId(contactId);
+        System.out.println("DEBUG: Picture URL in Service: " + contact.getPicture());
         return contactRepo.save(contact);
     }
 
@@ -52,5 +54,10 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public List<Contact> getByUserId(String userId) {
         return contactRepo.findByUserId(userId);
+    }
+
+    @Override
+    public List<Contact> getByUser(User user) {
+        return contactRepo.findByUser(user);
     }
 }
