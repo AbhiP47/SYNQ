@@ -27,29 +27,26 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public String uploadImage(MultipartFile contactImage) {
 
-        // Using a unique ID is good practice
-        String fileName = UUID.randomUUID().toString();
+        if (contactImage == null || contactImage.isEmpty()) {
+            log.info("No file uploaded or file is empty. Skipping Cloudinary upload.");
+            return null;
+        }
 
+        String fileName = UUID.randomUUID().toString();
         try {
-            // IMPROVEMENT: Use .getBytes() instead of available() for more reliability
+
             byte[] data = contactImage.getBytes();
 
-            log.info("Image is being uploaded to Cloudinary...");
-
-            // Grab the result map from the upload call
-            Map uploadResult = cloudinary.uploader().upload(data, ObjectUtils.asMap(
+            log.info("Image is being uploaded at the cloudinary");
+            cloudinary.uploader().upload(data, ObjectUtils.asMap(
                     "public_id", fileName
             ));
 
-            // GET THE URL DIRECTLY FROM THE RESULT
-            // "secure_url" is the HTTPS version
-            String secureUrl = uploadResult.get("secure_url").toString();
-
-            log.info("Upload Successful! URL: " + secureUrl);
-            return secureUrl;
+            log.info("Public URL is being fetched for the file : " + fileName);
+            return this.getUrlFromPublicId(fileName);
 
         } catch (IOException e) {
-            log.error("Cloudinary Upload failed: " + e.getMessage());
+            log.error("Cloudinary upload exception: " + e.getMessage());
             return null;
         }
     }
