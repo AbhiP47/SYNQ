@@ -28,10 +28,6 @@ public class ContactServiceImpl implements ContactService {
         return contactRepo.save(contact);
     }
 
-    @Override
-    public void update(Contact contact) {
-        return;
-    }
 
     @Override
     public List<Contact> getAll() {
@@ -91,5 +87,22 @@ public class ContactServiceImpl implements ContactService {
         return contactRepo.findByUserAndPhoneNumberContaining(user, phoneNumberKeyword, pageable);
     }
 
+    @Override
+    public Contact update(Contact contact) {
+        
+        var contactOld = contactRepo.findById(contact.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Contact not found"));
+        contactOld.setName(contact.getName());
+        contactOld.setEmail(contact.getEmail());
+        contactOld.setPhoneNumber(contact.getPhoneNumber());
+        contactOld.setAddress(contact.getAddress());
+        contactOld.setDescription(contact.getDescription());
+        contactOld.setPicture(contact.getPicture());
+        contactOld.setFavorite(contact.isFavorite());
+        contactOld.setWebsiteLink(contact.getWebsiteLink());
+        contactOld.setLinkedIn(contact.getLinkedIn());
+
+        return contactRepo.save(contactOld);
+    }
 
 }

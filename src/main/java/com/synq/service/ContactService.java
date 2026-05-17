@@ -10,8 +10,6 @@ public interface ContactService {
 
     Contact save(Contact contact);
 
-    void update(Contact contact);
-
     List<Contact> getAll();
 
     Contact getById(String id);
@@ -31,4 +29,5 @@ public interface ContactService {
 
     Page<Contact> searchByPhoneNumber(String phoneNumberKeyword, int size, int page, String sortBy, String order,
                                       User user);
+     Contact update(Contact contact) ;
 }

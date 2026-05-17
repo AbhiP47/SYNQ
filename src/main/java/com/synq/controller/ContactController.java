@@ -14,6 +14,7 @@ import com.synq.service.ImageService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.Banner;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -161,5 +162,29 @@ public class ContactController {
         return "redirect:/user/contacts";
     }
 
+    @GetMapping("/edit/{contactId}")
+    public String updateContactForm(@PathVariable("contactId") String contactId , Model model)
+    {
+        var contact = contactService.getById(contactId);
+        ContactForm contactForm = new ContactForm();
+        contactForm.setName(contact.getName());
+        contactForm.setEmail(contact.getEmail());
+        contactForm.setPhoneNumber(contact.getPhoneNumber());
+        contactForm.setAddress(contact.getAddress());
+        contactForm.setDescription(contact.getDescription());
+        contactForm.setFavorite(contact.isFavorite());
+        contactForm.setWebsiteLink(contact.getWebsiteLink());
+        contactForm.setLinkedInLink(contact.getLinkedIn());
+        contactForm.setPicture(contact.getPicture());
+        model.addAttribute("contactForm", contactForm);
+        model.addAttribute("contactId", contactId);
+
+        return "user/update_contact_view";
+    }
+
+    @PostMapping("/update/{contactId}")
+    public String updateContact(@PathVariable("contactId") String contactId , @ModelAttribute ContactForm contactForm , Model model){
+        return "redirect: /user/contacts/view";
+    }
 }
 
