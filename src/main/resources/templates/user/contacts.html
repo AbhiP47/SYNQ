@@ -20,7 +20,9 @@
             </p>
 
             <div class="w-full max-w-screen-xl bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-t-xl shadow-sm">
+                
                 <div class="flex flex-col md:flex-row items-center justify-between p-4 space-y-4 md:space-y-0">
+
                     <form
                             data-th-object="${contactSearchForm}"
                             data-th-action="@{'/user/contacts/search'}"
@@ -78,7 +80,7 @@
                                 <img
                                         class="w-10 h-10 rounded-full object-cover"
                                         data-th-src="${c.picture}"
-                                        onerror="this.onerror=null;this.src='/images/default-user.png';"
+                                        onerror="this.onerror=null;this.src='/images/user.png';"
                                         alt="Contact Image"
                                 />
 
@@ -118,30 +120,42 @@
 
                                     <span th:if="${(c.websiteLink == null || c.websiteLink.isEmpty()) && (c.linkedIn == null || c.linkedIn.isEmpty())}"
                                           class="text-gray-400 dark:text-gray-600 text-sm italic">
-            No links
-        </span>
-
+                                        No links
+                                    </span>
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <div>
-                                    <!-- delete contact -->
-                                    <button th:onclick="deleteContact([[${c.id}]])">
-                                        <i class="fa-solid w-6 h-6 fa-trash"></i>
-                                    </button>
-                                    <!-- update contact -->
-                                    <a data-th-href="@{'/user/contacts/view/'+*{id}}">
-                                        <i class="fa-solid w-6 h-6 fa-pen"></i
-                                        ></a>
+                                <div class="flex items-center justify-center gap-3 text-base">
 
-                                    <!-- viewcontact -->
-                                    <button th:onclick="loadContactdata([[${c.id}]])">
+                                    <button th:data-id="${c.id}"
+                                            onclick="loadContactdata(event, this.getAttribute('data-id'))"
+                                            class="text-gray-400 hover:text-blue-500 transition"
+                                            type="button"
+                                            title="View Details">
                                         <i class="fa-solid fa-eye"></i>
                                     </button>
-                                </div></a>
+
+                                    <a th:href="@{'/user/contacts/edit/' + ${c.id}}" class="text-gray-400 hover:text-green-500 transition" title="Edit Contact">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+
+                                    <button th:data-id="${c.id}"
+                                            onclick="deleteContact(this.getAttribute('data-id'))"
+                                            class="text-gray-400 hover:text-red-500 transition"
+                                            type="button"
+                                            title="Delete Contact">
+                                        <a th:href="@{/user/contacts/delete/{id}(id=${c.id})}"
+                                           onclick="deleteContact(event, this.getAttribute('data-id'))"
+                                           th:data-id="${c.id}"
+                                           class="text-gray-400 hover:text-red-500 transition"
+                                           title="Delete Contact">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
-                        <tr th:if="${#lists.isEmpty(contacts)}">
+                        <tr th:if="${#lists.isEmpty(contacts.getContent())}">
                             <td colspan="4" class="text-center py-10 text-gray-400">
                                 No contacts found. Start by adding some!
                             </td>
@@ -149,7 +163,6 @@
                         </tbody>
                     </table>
 
-                    <!-- pagination component  -->
                     <div
                             data-th-if="${contacts.totalPages > 0}"
                             class="pagination_container bg-white dark:bg-gray-800 p-5 text-center flex justify-center"
@@ -191,8 +204,11 @@
             </div>
         </div>
     </div>
+
+    <div data-th-replace="~{user/contact_modals :: contact}"></div>
 </div>
 
+<script data-th-src="@{'/js/contacts.js'}"></script>
 <script>
     console.log("Contacts Dashboard Initialized.");
 </script>

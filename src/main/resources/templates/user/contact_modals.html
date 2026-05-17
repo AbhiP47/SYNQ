@@ -1,0 +1,140 @@
+<div data-th-fragment="contact">
+    <div
+            id="view_contact_modal"
+            tabindex="-1"
+            aria-hidden="true"
+            class="hidden transition-all duration-300 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900/50 backdrop-blur-sm"
+    >
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <div class="relative bg-white rounded-xl shadow-lg dark:bg-gray-800 border border-gray-100 dark:border-gray-700 transition-all transform">
+
+                <div class="flex justify-between p-4 md:p-6 border-b rounded-t dark:border-gray-700 items-start">
+                    <div class="w-6"></div> <div class="flex flex-col justify-center items-center space-y-3 flex-1">
+                    <div class="relative">
+                        <img
+                                onerror="this.onerror=null;this.src='https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'"
+                                id="contact_image"
+                                class="w-28 h-28 rounded-full object-cover ring-4 ring-gray-100 dark:ring-gray-700 shadow-sm"
+                                src=""
+                                alt="Contact Avatar"
+                        />
+                    </div>
+                    <h3
+                            id="contact_name"
+                            class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight"
+                    ></h3>
+
+                    <p class="text-sm text-gray-500 dark:text-gray-400 font-medium" id="contact_email"></p>
+
+                    <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 px-3 py-1 rounded-full text-sm font-medium">
+                        <i class="fa-solid fa-phone text-xs text-gray-400"></i>
+                        <span id="contact_phone"></span>
+                    </div>
+                </div>
+
+                    <button
+                            type="button"
+                            class="text-gray-400 border border-gray-200 dark:border-gray-600 bg-transparent hover:bg-gray-100 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center dark:hover:bg-gray-700 dark:hover:text-white transition"
+                            onclick="closeContactModal()"
+                    >
+                        <svg
+                                class="w-3 h-3"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 14 14"
+                        >
+                            <path
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                            />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+
+                <div class="p-5 space-y-4">
+                    <div class="relative overflow-x-auto border border-gray-100 dark:border-gray-700 rounded-xl">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <tbody>
+
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-gray-700/30">
+                                <th scope="row" class="px-5 py-3.5 font-semibold text-gray-900 whitespace-nowrap dark:text-white w-1/4">
+                                    <div class="flex items-center gap-2 text-gray-400 dark:text-gray-500">
+                                        <i class="fa-solid fa-location-dot w-5 text-center text-base"></i>
+                                        <span>Address</span>
+                                    </div>
+                                </th>
+                                <td class="px-5 py-3.5 text-gray-700 dark:text-gray-300">
+                                    <span id="contact_address"></span>
+                                </td>
+                            </tr>
+
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-gray-700/30">
+                                <th scope="row" class="px-5 py-3.5 font-semibold text-gray-900 whitespace-nowrap dark:text-white">
+                                    <div class="flex items-center gap-2 text-gray-400 dark:text-gray-500">
+                                        <i class="fa-solid fa-user w-5 text-center text-base"></i>
+                                        <span>About</span>
+                                    </div>
+                                </th>
+                                <td class="px-5 py-3.5 text-gray-700 dark:text-gray-300">
+                                    <span id="contact_about"></span>
+                                </td>
+                            </tr>
+
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-gray-700/30">
+                                <th scope="row" class="px-5 py-3.5 font-semibold text-gray-900 whitespace-nowrap dark:text-white">
+                                    <div class="flex items-center gap-2 text-gray-400 dark:text-gray-500">
+                                        <i class="fa-solid fa-heart w-5 text-center text-base"></i>
+                                        <span>Status</span>
+                                    </div>
+                                </th>
+                                <td class="px-5 py-3.5 text-gray-700 dark:text-gray-300">
+                                    <span id="contact_favorite"></span>
+                                </td>
+                            </tr>
+
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-gray-700/30">
+                                <th scope="row" class="px-5 py-3.5 font-semibold text-gray-900 whitespace-nowrap dark:text-white">
+                                    <div class="flex items-center gap-2 text-gray-400 dark:text-gray-500">
+                                        <i class="fa-solid fa-earth-americas w-5 text-center text-base"></i>
+                                        <span>Website</span>
+                                    </div>
+                                </th>
+                                <td class="px-5 py-3.5">
+                                    <a id="contact_website" href="#" target="_blank" class="text-blue-600 hover:underline dark:text-blue-400 font-medium"></a>
+                                </td>
+                            </tr>
+
+                            <tr class="bg-white hover:bg-gray-50/50 dark:hover:bg-gray-700/30">
+                                <th scope="row" class="px-5 py-3.5 font-semibold text-gray-900 whitespace-nowrap dark:text-white">
+                                    <div class="flex items-center gap-2 text-gray-400 dark:text-gray-500">
+                                        <i class="fa-brands fa-linkedin w-5 text-center text-base"></i>
+                                        <span>LinkedIn</span>
+                                    </div>
+                                </th>
+                                <td class="px-5 py-3.5">
+                                    <a id="contact_linkedIn" href="#" target="_blank" class="text-blue-600 hover:underline dark:text-blue-400 font-medium"></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
+                    <button
+                            onclick="closeContactModal()"
+                            type="button"
+                            class="py-2 px-5 text-sm font-medium text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 transition shadow-sm"
+                    >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

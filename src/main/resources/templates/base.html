@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="en"
-      class="light"
       th:fragment="parent(content,title,script)"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <!-- Use standard th:href for internal CSS -->
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark' ||
+            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     <link rel="stylesheet" th:href="@{/css/output.css}" />
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
@@ -14,7 +22,6 @@
 </head>
 <body class="dark:bg-gray-800 dark:text-white bg-gray-100">
 
-<!-- Header Section -->
 <header>
     <div th:if="${loggedInUser}">
         <div data-th-replace="~{user/user_navbar::user-navbar}"></div>
@@ -24,15 +31,12 @@
     </div>
 </header>
 
-
-
-<!-- Main Content Area -->
 <main>
     <section data-th-replace="${content}"></section>
 </main>
 
-<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script data-th-src="@{'/js/script.js'}"></script>
 <th:block data-th-replace="${script}"></th:block>
 </body>

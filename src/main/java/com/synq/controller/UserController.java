@@ -40,14 +40,22 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String userProfile(Model model ,  Authentication authentication)
-    {
-        User user = (User) model.getAttribute("loggedInUser");
-        String username = user.getEmail();
-        logger.info("User logged in : {}",username);
-        logger.info("user name : {}",user.getName());
-        logger.info("user email : {}",user.getEmail());
-        System.out.println("User Profile");
+    public String userProfile(Authentication authentication, Model model) {
+        //  Get the email from the authenticated principal
+        String email = Helper.getEmailOfLoggedInUser(authentication);
+
+        //  Fetch the user from the database
+        User user = userService.getUserByEmail(email);
+
+        //  If database returned null, invalidate session safely
+        if (user == null) {
+            logger.warn("Profile requested for dirty session user: {}. Redirecting to logout.", email);
+            return "redirect:/logout";
+        }
+
+        logger.info("Loading profile view for user: {}", user.getEmail());
+
+        model.addAttribute("user", user);
         return "user/profile";
     }
 }

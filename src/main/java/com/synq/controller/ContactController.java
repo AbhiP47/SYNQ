@@ -19,10 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -104,4 +101,65 @@ public class ContactController {
         model.addAttribute("contactSearchForm", new ContactSearchForm());
         return "user/contacts";
     }
+
+    @RequestMapping("/search")
+    public String searchHandler(
+
+            @ModelAttribute ContactSearchForm contactSearchForm,
+            @RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
+            Model model,
+            Authentication authentication) {
+
+        log.info("field {} keyword {}", contactSearchForm.getField(), contactSearchForm.getValue());
+
+        var user = userService.getUserByEmail(Helper.getEmailOfLoggedInUser(authentication));
+
+        Page<Contact> pageContact = null;
+        if (contactSearchForm.getField().equalsIgnoreCase("name")) {
+            pageContact = contactService.searchByName(contactSearchForm.getValue(), size, page, sortBy, direction,
+                    user);
+        } else if (contactSearchForm.getField().equalsIgnoreCase("email")) {
+            pageContact = contactService.searchByEmail(contactSearchForm.getValue(), size, page, sortBy, direction,
+                    user);
+        } else if (contactSearchForm.getField().equalsIgnoreCase("phone")) {
+            pageContact = contactService.searchByPhoneNumber(contactSearchForm.getValue(), size, page, sortBy,
+                    direction, user);
+        }
+
+        log.info("pageContact {}", pageContact);
+
+        model.addAttribute("contactSearchForm", contactSearchForm);
+
+        model.addAttribute("pageContact", pageContact);
+
+        model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
+
+        return "user/search";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteContact(@PathVariable("id") String id, Authentication authentication , HttpSession session) {
+        String loggedInUserEmail = Helper.getEmailOfLoggedInUser(authentication);
+        User currentUser = userService.getUserByEmail(loggedInUserEmail);
+
+        Contact contact = contactService.getById(id);
+
+        if (contact == null || !contact.getUser().getId().equals(currentUser.getId())) {
+            log.warn("Unauthorized delete attempt by user: {} on contact ID: {}", loggedInUserEmail, id);
+            return "redirect:/user/contacts?error=unauthorized";
+        }
+
+        contactService.delete(id);
+        session.setAttribute("message",
+                Message.builder()
+                        .content("Contact is deleted successfully")
+                        .type(MessageType.green)
+                        .build());
+        return "redirect:/user/contacts";
+    }
+
 }
+
