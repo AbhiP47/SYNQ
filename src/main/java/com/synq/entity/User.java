@@ -43,6 +43,7 @@ public class User {
     private boolean enabled = false;
     private boolean emailVerified = false;
     private boolean phoneVerified = false;
+    private String emailToken;
 
     // Provider information
     @Enumerated(value = EnumType.STRING)

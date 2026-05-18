@@ -2,10 +2,13 @@ package com.synq.service.serviceImplementation;
 
 import com.synq.enums.Provider;
 import com.synq.helpers.AppConstants;
+import com.synq.helpers.Helper;
 import com.synq.helpers.ResourceNotFoundException;
 import com.synq.entity.User;
 import com.synq.repository.UserRepo;
+import com.synq.service.EmailService;
 import com.synq.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -22,6 +28,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
@@ -29,8 +38,17 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoleList(List.of(AppConstants.ROLE_USER));
         user.setProvider(Provider.SELF);
+
+        String emailToken = UUID.randomUUID().toString();
+
+        String emailLink = Helper.getLinkForEmailVerification(emailToken);
+        emailService.sendEmail(user.getEmail(),
+                "Verify Account : SYNQ",
+                emailLink);
+        log.info("Verification email sent to : {}",user.getEmail());
+        user.setEmailToken(emailToken);
         logger.info(user.getProvider().toString());
-        return userRepo.save(user);
+        return  userRepo.save(user);
     }
 
     @Override
