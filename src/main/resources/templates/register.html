@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title} , ~{:: script})}">
+<html lang="en"
+      th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{:: script})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>
-        signup page
-    </title>
+    <title>Create Account - SYNQ</title>
 </head>
-
 <body>
 
 <div id="content" class="p-4">
-
     <div class="block max-w-lg p-8 mx-auto bg-blue-50 border-t-[10px] border-t-blue-700 rounded-xl shadow-lg dark:bg-gray-900 dark:border-t-blue-500">
-        <div data-th-replace="message :: messagebox"></div>
+
+        <div data-th-replace="~{message :: messagebox}"></div>
+
         <h5 class="mb-6 text-3xl font-extrabold text-center text-indigo-600 dark:text-indigo-400">
             Create Your Account
         </h5>
@@ -19,61 +19,53 @@
             Start managing your contacts on the cloud easily!
         </p>
 
-        <form data-th-action="@{'/do-register'}" method="post" th:object="${userForm}" novalidate>
+        <form data-th-action="@{'/do-register'}" method="post" data-th-object="${userForm}" novalidate>
+
             <div class="mb-5">
                 <label for="name" class="block mb-2 text-sm font-semibold text-gray-800 dark:text-gray-200">Your Name</label>
-                <input type="text" id="name" th:field="*{name}" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500 transition duration-150 ease-in-out" placeholder="Enter your full name" required />
-            <p      data-th-if="${#fields.hasErrors('name')}"
-                    data-th-errors="*{name}"
-                    class="text-red-500 text-sm mt-1">
-
-            </p>
+                <input type="text" id="name" th:field="*{name}" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition duration-150" placeholder="Enter your full name" required />
+                <p data-th-if="${#fields.hasErrors('name')}" data-th-errors="*{name}" class="text-red-500 text-sm mt-1"></p>
             </div>
+
             <div class="mb-5">
                 <label for="email" class="block mb-2 text-sm font-semibold text-gray-800 dark:text-gray-200">Your Email</label>
-                <input type="email" id="email" th:field="*{email}" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500 transition duration-150 ease-in-out" placeholder="e.g., you@example.com" required />
-                <p      data-th-if="${#fields.hasErrors('email')}"
-                        data-th-errors="*{email}" class="text-red-500 text-sm mt-1">
-
-                </p>
+                <input type="email" id="email" th:field="*{email}" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition duration-150" placeholder="e.g., you@example.com" required />
+                <p data-th-if="${#fields.hasErrors('email')}" data-th-errors="*{email}" class="text-red-500 text-sm mt-1"></p>
             </div>
+
             <div class="mb-5">
                 <label for="password" class="block mb-2 text-sm font-semibold text-gray-800 dark:text-gray-200">New Password</label>
-                <input type="password" id="password" th:field="*{password}" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500 transition duration-150 ease-in-out" placeholder="Must be at least 8 characters" required />
-                <p      data-th-if="${#fields.hasErrors('password')}"
-                        data-th-errors="*{password}" class="text-red-500 text-sm mt-1"> </p>
+                <input type="password" id="password" th:field="*{password}" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition duration-150" placeholder="Must be at least 8 characters" required />
+                <p data-th-if="${#fields.hasErrors('password')}" data-th-errors="*{password}" class="text-red-500 text-sm mt-1"></p>
             </div>
+
             <div class="mb-5">
                 <label for="phone" class="block mb-2 text-sm font-semibold text-gray-800 dark:text-gray-200">Contact Number</label>
-                <input type="text" id="phone" th:field="*{phoneNumber}" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500 transition duration-150 ease-in-out" placeholder="e.g., +91 9876543210" required />
-                <p      data-th-if="${#fields.hasErrors('phoneNumber')}"
-                        data-th-errors="*{phoneNumber}" class="text-red-500 text-sm mt-1"> </p>
+                <input type="text" id="phone" th:field="*{phoneNumber}" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition duration-150" placeholder="e.g., 9876543210" required />
+                <p data-th-if="${#fields.hasErrors('phoneNumber')}" data-th-errors="*{phoneNumber}" class="text-red-500 text-sm mt-1"></p>
             </div>
 
             <div class="mb-6">
                 <label for="about" class="block mb-2 text-sm font-semibold text-gray-800 dark:text-gray-200">Tell us about yourself</label>
-                <textarea id="about" th:field="*{about}" rows="6" class="block p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500 transition duration-150 ease-in-out" placeholder="Share a few words about your interests or background..."></textarea>
-                <p      data-th-if="${#fields.hasErrors('about')}"
-                        data-th-errors="*{about}" class="text-red-500 text-sm mt-1"> </p>
+                <textarea id="about" th:field="*{about}" rows="4" class="block p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition duration-150" placeholder="Share a few words about your background..."></textarea>
+                <p data-th-if="${#fields.hasErrors('about')}" data-th-errors="*{about}" class="text-red-500 text-sm mt-1"></p>
             </div>
 
             <div class="mb-3 flex justify-center space-x-4">
-
-                <button type="submit" class="w-1/2 px-5 py-3 text-base font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-150 ease-in-out transform hover:scale-105">
+                <button type="submit" class="w-1/2 px-5 py-3 text-base font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition transform hover:scale-[1.02]">
                     Sign Up
                 </button>
-
-                <button type="reset" class="w-1/2 px-5 py-3 text-base font-medium text-center text-orange-900 bg-orange-100 rounded-lg hover:bg-orange-200 focus:ring-4 focus:ring-orange-300 dark:bg-orange-700 dark:hover:bg-orange-600 dark:text-white dark:focus:ring-orange-800 transition duration-150 ease-in-out">
+                <button type="reset" class="w-1/2 px-5 py-3 text-base font-medium text-center text-orange-900 bg-orange-100 rounded-lg hover:bg-orange-200 dark:bg-orange-700 dark:hover:bg-orange-600 dark:text-white transition">
                     Reset
                 </button>
-
             </div>
 
         </form>
     </div>
 </div>
+
 <script>
-    console.log("signup page");
+    console.log("Signup view rendered.");
 </script>
 </body>
 </html>

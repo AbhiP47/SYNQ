@@ -7,12 +7,14 @@ import com.synq.helpers.Message;
 import com.synq.service.serviceImplementation.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Controller
 public class PageController {
     @Autowired
@@ -54,8 +56,8 @@ public class PageController {
     @GetMapping("/login")
     public String login()
     {
-        System.out.println("login");
-        return "login";
+    log.info("Initiating login page");
+    return "login";
     }
 
     // this is the registration controller - for showing the view page
@@ -64,6 +66,7 @@ public class PageController {
     {
         UserForm userForm = new UserForm();
         model.addAttribute("userForm",userForm);
+        log.info("Initiating register page");
         return "register";
     }
 
@@ -99,12 +102,16 @@ public class PageController {
         user.setPassword(userForm.getPassword());
         user.setAbout(userForm.getAbout());
         user.setPhoneNumber(userForm.getPhoneNumber());
+        user.setEnabled(false);
         user.setProfilePic("https://imgs.search.brave.com/J1XPhA-Al_wGSPHxqwWvH0IVUHufLQHGn-wKxuV9ScE/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzI0LzIz/Lzk4LzI0MjM5ODY2/Yzg0OTUxNTg2NjRi/OWQyZjM4NWMxYzM5/LmpwZw");
 
         User savedUser = userService.saveUser(user);
-        System.out.println(savedUser);
+        log.info("Registration of new user is successfull");
+        log.info("Registered user is {}",savedUser);
+
         Message  message = Message.builder().content("Registration Successful").type(MessageType.green).build();
         session.setAttribute("message",message);
+
         return "redirect:/register";
     }
 

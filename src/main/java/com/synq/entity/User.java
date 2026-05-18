@@ -40,7 +40,7 @@ public class User {
     private String phoneNumber;
 
     // Information fields
-    private boolean enabled = true;
+    private boolean enabled = false;
     private boolean emailVerified = false;
     private boolean phoneVerified = false;
 
