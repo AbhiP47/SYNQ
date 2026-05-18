@@ -89,7 +89,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact update(Contact contact) {
-        
+
         var contactOld = contactRepo.findById(contact.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Contact not found"));
         contactOld.setName(contact.getName());
@@ -101,6 +101,7 @@ public class ContactServiceImpl implements ContactService {
         contactOld.setFavorite(contact.isFavorite());
         contactOld.setWebsiteLink(contact.getWebsiteLink());
         contactOld.setLinkedIn(contact.getLinkedIn());
+        contactOld.setPicture(contact.getPicture());
 
         return contactRepo.save(contactOld);
     }

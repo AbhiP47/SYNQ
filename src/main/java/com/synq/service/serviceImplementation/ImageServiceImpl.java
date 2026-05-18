@@ -34,20 +34,19 @@ public class ImageServiceImpl implements ImageService {
 
         String fileName = UUID.randomUUID().toString();
         try {
-
             byte[] data = contactImage.getBytes();
 
-            log.info("Image is being uploaded at the cloudinary");
+            log.info("Uploading binary payload to Cloudinary with Public ID: {}", fileName);
             cloudinary.uploader().upload(data, ObjectUtils.asMap(
                     "public_id", fileName
             ));
 
-            log.info("Public URL is being fetched for the file : " + fileName);
+            log.info("Fetching transformed asset public CDN secure URL path loop...");
             return this.getUrlFromPublicId(fileName);
 
         } catch (IOException e) {
-            log.error("Cloudinary upload exception: " + e.getMessage());
-            return null;
+            log.error("Cloudinary upload failed due to systemic transport exception: ", e);
+            throw new RuntimeException("Failed to store file on cloud architecture provider: " + e.getMessage());
         }
     }
 
@@ -62,6 +61,6 @@ public class ImageServiceImpl implements ImageService {
                                 .height(AppConstants.CONTACT_IMAGE_HEIGHT)
                                 .crop(AppConstants.CONTACT_IMAGE_CROP)
                 )
-                .generate();
+                .generate(publicId);
     }
 }

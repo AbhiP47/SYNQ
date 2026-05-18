@@ -14,15 +14,12 @@ import com.synq.service.ImageService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.Banner;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -162,10 +159,10 @@ public class ContactController {
         return "redirect:/user/contacts";
     }
 
-    @GetMapping("/edit/{contactId}")
-    public String updateContactForm(@PathVariable("contactId") String contactId , Model model)
-    {
+    @GetMapping("/view/{contactId}")
+    public String updateContactFormView(@PathVariable("contactId") String contactId, Model model) {
         var contact = contactService.getById(contactId);
+
         ContactForm contactForm = new ContactForm();
         contactForm.setName(contact.getName());
         contactForm.setEmail(contact.getEmail());
@@ -174,8 +171,10 @@ public class ContactController {
         contactForm.setDescription(contact.getDescription());
         contactForm.setFavorite(contact.isFavorite());
         contactForm.setWebsiteLink(contact.getWebsiteLink());
+
         contactForm.setLinkedInLink(contact.getLinkedIn());
         contactForm.setPicture(contact.getPicture());
+
         model.addAttribute("contactForm", contactForm);
         model.addAttribute("contactId", contactId);
 
@@ -183,8 +182,42 @@ public class ContactController {
     }
 
     @PostMapping("/update/{contactId}")
-    public String updateContact(@PathVariable("contactId") String contactId , @ModelAttribute ContactForm contactForm , Model model){
-        return "redirect: /user/contacts/view";
+    public String updateContact(@PathVariable("contactId") String contactId,
+                                @Valid @ModelAttribute ContactForm contactForm,
+                                BindingResult bindingResult,
+                                Model model) {
+
+        if (bindingResult.hasErrors()) {
+            log.warn("Validation errors detected during contact update tracking framework context.");
+
+            model.addAttribute("contactId", contactId);
+            return "user/update_contact_view";
+        }
+
+        // 2. Fetch and Update Database Object Mapping
+        var con = contactService.getById(contactId);
+        con.setName(contactForm.getName());
+        con.setEmail(contactForm.getEmail());
+        con.setPhoneNumber(contactForm.getPhoneNumber());
+        con.setAddress(contactForm.getAddress());
+        con.setDescription(contactForm.getDescription());
+        con.setFavorite(contactForm.isFavorite());
+        con.setWebsiteLink(contactForm.getWebsiteLink());
+        con.setLinkedIn(contactForm.getLinkedInLink());
+
+        if (contactForm.getContactImage() != null && !contactForm.getContactImage().isEmpty()) {
+            log.info("New binary profile attachment detected. Initiating Cloudinary asset upload channel.");
+            String imageUrl = imageService.uploadImage(contactForm.getContactImage());
+            con.setPicture(imageUrl);
+            contactForm.setPicture(imageUrl);
+        } else {
+            log.info("No file replacement detected. Keeping existing contact image reference context.");
+        }
+
+        var updateCon = contactService.update(con);
+        log.info("Updated contact record successfully synced: {}", updateCon);
+        return "redirect:/user/contacts";
     }
+
 }
 
