@@ -41,9 +41,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(authorize -> {
-                    // FIX 1: Whitelisted '/do-register' so signup form data can reach your controller
                     authorize
-                            .requestMatchers("/login", "/register", "/do-register", "/oauth2/**", "/css/**", "/js/**", "/images/**")
+                            .requestMatchers("/login", "/register", "/do-register", "/oauth2/**", "/css/**", "/js/**", "/images/**" , "/auth/**")
                             .permitAll();
 
                     // Define rules for specific roles
@@ -59,7 +58,6 @@ public class SecurityConfig {
         httpSecurity.formLogin(formLogin ->
                 formLogin.loginPage("/login")
                         .loginProcessingUrl("/authenticate")
-                        // FIX 2: Swapped out OAuth handler for a safe, default redirection path to avoid ClassCastExceptions
                         .defaultSuccessUrl("/user/profile", true)
                         .failureUrl("/login?error=true")
                         .usernameParameter("email")

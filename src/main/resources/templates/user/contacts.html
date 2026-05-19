@@ -62,10 +62,16 @@
                             Search
                         </button>
                     </form>
+                    <button
+                            type="button"
+                            onclick="exportData()"
+                            class="px-3 py-2 bg-green-800 hover:bg-green-1000 text-white font-medium rounded transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                        Export
+                    </button>
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <table id="contact-table" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">Name</th>
@@ -207,10 +213,20 @@
 
     <div data-th-replace="~{user/contact_modals :: contact}"></div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/@linways/table-to-excel@1.0.4/dist/tableToExcel.min.js"></script>
 <script data-th-src="@{'/js/contacts.js'}"></script>
 <script>
     console.log("Contacts Dashboard Initialized.");
+</script>
+<script>
+    function exportData() {
+       TableToExcel.convert(document.getElementById("contact-table"), {
+         name: "contacts.xlsx",
+         sheet: {
+           name: "Sheet 1",
+         },
+       });
+     }
 </script>
 </body>
 </html>

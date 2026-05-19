@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -106,5 +107,15 @@ public class UserServiceImpl implements UserService {
             return optionalUser.get();
         else
             return null;
+    }
+
+    @Override
+    public User getUserByEmailToken(String token) {
+        Optional<User> user = userRepo.getUserByEmailToken(token);
+        if (user.isPresent()) {
+            log.info("User fetched from email token");
+            return user.get();
+        }
+        throw new UsernameNotFoundException("User not found with the provided email token: " + token);
     }
 }
