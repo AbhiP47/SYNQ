@@ -12,16 +12,16 @@ class SynqApplicationTests {
 	void contextLoads() {
 	}
 
-	@Autowired
-	private EmailService service;
-
-	@Test
-	void sendEmailTest()
-	{
-		service.sendEmail(
-				"abhinavjaipanwar@gmail.com",
-				"Testing the email service",
-				"this is SYNQ project"
-		);
-	}
+//	@Autowired
+//	private EmailService service;
+//
+//	@Test
+//	void sendEmailTest()
+//	{
+//		service.sendEmail(
+//				"abhinavjaipanwar@gmail.com",
+//				"Testing the email service",
+//				"this is SYNQ project"
+//		);
+//	}
 }

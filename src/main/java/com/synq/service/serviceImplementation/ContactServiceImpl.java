@@ -36,7 +36,8 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact getById(String id) {
-        return contactRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException(STR."Contact not found with the given id : \{id}"));
+        return contactRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Contact not found with the given id : " + id));
     }
 
     @Override

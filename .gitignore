@@ -3,3 +3,7 @@ node_modules
 HELP.md
 target/
 application.properties
+.env
+application-dev.properties
+application-prod.properties
+src/main/resources/application-prod.properties

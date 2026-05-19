@@ -17,7 +17,7 @@ public class EmailServiceImpl implements EmailService {
         this.mailSender = mailSender;
     }
 
-    @Value("${spring.mail.properties.from}")
+    @Value("${app.mail.from}")
     private String from;
 
     @Override
