@@ -248,3 +248,4 @@ class node_user_entity,node_contact_entity,node_social_link,node_user_form,node_
 class node_user_service,node_contact_service,node_email_service,node_image_service toneRose
 class node_user_repo,node_contact_repo toneIndigo
 class node_security_config,node_oauth_service,node_success_handler,node_failure_handler,node_details_service,node_security_user_service,node_app_config,node_file_validator,node_valid_file toneTeal
+```
