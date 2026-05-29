@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Feedback - SYNQ</title>
+</head>
+<body>
+<div id="content">
+    <!-- Sidebar for authenticated users -->
+    <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="ml-64 pt-20">
+        <div class="grid grid-cols-12">
+            <div class="col-span-12 md:col-span-6 md:col-start-4 px-4 pb-10">
+                <div class="card block p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+
+                    <!-- Global Message Box (Success/Error) -->
+                    <div data-th-replace="~{message :: messagebox}"></div>
+
+                    <h1 class="text-2xl font-semibold">Submit Feedback</h1>
+                    <p class="text-gray-500 mb-6">
+                        We value your feedback. Please let us know how we can improve.
+                    </p>
+
+                    <form
+                            class="space-y-4"
+                    >
+                        <!-- Subject Field -->
+                        <div class="mb-3">
+                            <label for="subject_input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subject</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                    <img
+                                            data-th-src="@{/images/user.png}"
+                                            alt="user Icon"
+                                            class="h-5 w-5 object-contain"/>
+                                </div>
+                                <input
+                                        id="subject_input"
+                                        type="text"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        placeholder="Enter subject"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Message -->
+                        <div class="mb-3">
+                            <label for="message_input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Message</label>
+                            <textarea
+                                    id="message_input"
+                                    rows="6"
+                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    placeholder="Tell us more..."
+                            ></textarea>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex justify-center space-x-3 pt-4">
+                            <button type="submit" class="px-6 py-2.5 bg-blue-600 text-white font-medium text-sm rounded-lg hover:bg-blue-700 transition">Submit Feedback</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    console.log("Feedback page initialized.");
+</script>
+</body>
+</html>

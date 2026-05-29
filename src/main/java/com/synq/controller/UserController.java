@@ -58,4 +58,10 @@ public class UserController {
         model.addAttribute("user", user);
         return "user/profile";
     }
+
+    @GetMapping("/feedback")
+    public String userFeedback()
+    {
+        return "user/feedback";
+    }
 }
