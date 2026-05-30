@@ -43,9 +43,9 @@ public class UserServiceImpl implements UserService {
         String emailToken = UUID.randomUUID().toString();
 
         String emailLink = Helper.getLinkForEmailVerification(emailToken);
-        emailService.sendEmail(user.getEmail(),
+        emailService.sendEmailForVerification(user.getEmail(),
                 "Verify Account : SYNQ",
-                emailLink);
+                emailLink );
         log.info("Verification email sent to : {}",user.getEmail());
         user.setEmailToken(emailToken);
         logger.info(user.getProvider().toString());

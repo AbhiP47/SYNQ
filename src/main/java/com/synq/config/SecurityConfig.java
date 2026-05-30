@@ -42,7 +42,7 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(authorize -> {
                     authorize
-                            .requestMatchers("/login", "/register", "/do-register", "/oauth2/**", "/css/**", "/js/**", "/images/**" , "/auth/**")
+                            .requestMatchers("/login", "/register", "/do-register", "/oauth2/**", "/css/**", "/js/**", "/images/**" , "/auth/**" ,"/webjars/**")
                             .permitAll();
 
                     // Define rules for specific roles
