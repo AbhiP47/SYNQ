@@ -10,9 +10,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASSWORD:-0000}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - postgres_synq_data:/var/lib/postgresql/data
+      - postgres_synq_data:/var/lib/postgresql
     networks:
       - synq-network
     healthcheck:
@@ -30,22 +30,22 @@ services:
     ports:
       - "8081:8081"
     environment:
-      # Overriding application.properties matching your dynamic vars
+
       SPRING_DATASOURCE_URL: jdbc:postgresql://synq-db:5432/synq_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-0000}
-      
+
       # OAuth2 Credentials passed from your local host host environment .env
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       LINKEDIN_CLIENT_ID: ${LINKEDIN_CLIENT_ID}
       LINKEDIN_CLIENT_SECRET: ${LINKEDIN_CLIENT_SECRET}
-      
+
       # Asset Storage Cloudinary Envs
       CLOUDINARY_NAME: ${CLOUDINARY_NAME}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
-      
+
       # Communication SMTP Mail Envs
       MAIL_HOST: ${MAIL_HOST:-smtp.mailersend.net}
       MAIL_PORT: ${MAIL_PORT:-587}
@@ -59,7 +59,7 @@ services:
       - synq-network
 
 volumes:
-  postgres_synq_data: # Keeps  database entries safe even if containers are destroyed
+  postgres_synq_data: # Keeps database entries safe even if containers are destroyed
 
 networks:
   synq-network:
