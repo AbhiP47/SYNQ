@@ -64,26 +64,34 @@ jobs:
           envs: DOCKERHUB_USERNAME
           script: |
             set -e
-            mkdir -p ~/synq-app && cd ~/synq-app/
+            mkdir -p ~/synq-app && cd ~/synq-app
 
-            echo " Fetching live configurations from AWS SSM Parameter Store..."
+            echo "📦 Fetching live configurations from AWS SSM Parameter Store..."
             aws ssm get-parameters-by-path \
               --path "/config/synq" \
               --with-decryption \
               --query "Parameters[*].[Name,Value]" \
-              --output text | sed 's|/config/synq/||g' | awk '{print $1 "=" $2}' > .env
+              --output text |
+            while IFS=$'\t' read -r key value; do
+              echo "${key##*/}=$value"
+            done > .env
 
-            # Append the dynamic Dockerhub username needed by docker-compose.yml
+            # Fail if .env is empty
+            if [ ! -s .env ]; then
+              echo "❌ ERROR: Generated .env file is empty!"
+              exit 1
+            fi
+
             echo "DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME" >> .env
 
-            echo " Pulling fresh image via Docker Compose..."
+            echo "📥 Pulling fresh image..."
             docker-compose pull
 
-            echo " Launching app container dynamically with Zero-Downtime matching config..."
-            docker-compose up -d --remove-orphans
+            echo "🚀 Starting containers..."
+            docker-compose up -d --force-recreate --remove-orphans
 
-            echo " Post-deployment cleanup..."
-            rm -f .env
+            echo "🧹 Cleaning unused images..."
             docker image prune -f
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+
+          env:
+            DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
