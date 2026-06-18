@@ -1,66 +1,28 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
-  synq-db:
-    image: postgres:15-alpine
-    container_name: synq-database-container
-    environment:
-      POSTGRES_DB: synq_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-0000}
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres_synq_data:/var/lib/postgresql
-    networks:
-      - synq-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d synq_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  #  Spring Boot Application SYNQ
   synq-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${DOCKERHUB_USERNAME}/synq-app:latest
     container_name: synq-application-container
     ports:
       - "8081:8081"
+
+
+    # Docker Compose automatically searches for a local '.env' file to populate these:
     environment:
-
-      SPRING_DATASOURCE_URL: jdbc:postgresql://synq-db:5432/synq_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-0000}
-
-      # OAuth2 Credentials passed from your local host host environment .env
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       LINKEDIN_CLIENT_ID: ${LINKEDIN_CLIENT_ID}
       LINKEDIN_CLIENT_SECRET: ${LINKEDIN_CLIENT_SECRET}
-
-      # Asset Storage Cloudinary Envs
       CLOUDINARY_NAME: ${CLOUDINARY_NAME}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
-
-      # Communication SMTP Mail Envs
-      MAIL_HOST: ${MAIL_HOST:-smtp.mailersend.net}
-      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
       MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS}
-    depends_on:
-      synq-db:
-        condition: service_healthy # Waiting for Postgres to fully boot before starting Java
-    networks:
-      - synq-network
-
-volumes:
-  postgres_synq_data: # Keeps database entries safe even if containers are destroyed
-
-networks:
-  synq-network:
-    driver: bridge
+    restart: unless-stopped
