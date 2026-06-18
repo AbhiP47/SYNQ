@@ -12,7 +12,6 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-
       # Authenticate with Docker Hub using your existing secrets
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -56,6 +55,8 @@ jobs:
       # SSH and use Docker Compose driven by AWS SSM Store
       - name: SSH into AWS EC2 and Refresh App Container
         uses: appleboy/ssh-action@v1.2.5
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
@@ -92,6 +93,3 @@ jobs:
 
             echo "🧹 Cleaning unused images..."
             docker image prune -f
-
-          env:
-            DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
