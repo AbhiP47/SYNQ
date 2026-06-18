@@ -5,7 +5,7 @@ services:
     image: ${DOCKERHUB_USERNAME}/synq-app:latest
     container_name: synq-application-container
     ports:
-      - "8081:8080"
+      - "8081:8081"
     env_file:
       - .env
     restart: unless-stopped
