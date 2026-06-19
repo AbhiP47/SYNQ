@@ -32,15 +32,17 @@ public class UserController {
     private final UserService userService;
     private final ContactService contactService;
     private final EmailService emailService;
+    private final Helper helper;
 
 
 
     @Autowired
-    public UserController(UserRepo userRepo, UserService userService, ContactService contactService, EmailService emailService) {
+    public UserController(UserRepo userRepo, UserService userService, ContactService contactService, EmailService emailService, Helper helper) {
         this.userRepo = userRepo;
         this.userService = userService;
         this.contactService = contactService;
         this.emailService = emailService;
+        this.helper = helper;
     }
 
     @GetMapping("/dashboard")
@@ -52,7 +54,7 @@ public class UserController {
     @GetMapping("/profile")
     public String userProfile(Authentication authentication, Model model) {
         //  Get the email from the authenticated principal
-        String email = Helper.getEmailOfLoggedInUser(authentication);
+        String email = helper.getEmailOfLoggedInUser(authentication);
 
         //  Fetch the user from the database
         User user = userService.getUserByEmail(email);
@@ -77,7 +79,7 @@ public class UserController {
 
     @GetMapping("/direct-email")
     public String directEmail(Authentication authentication, Model model) {
-        String email = Helper.getEmailOfLoggedInUser(authentication);
+        String email = helper.getEmailOfLoggedInUser(authentication);
         User user = userService.getUserByEmail(email);
         List<Contact> contacts = contactService.getByUserId(String.valueOf(user.getId()));
         model.addAttribute("contacts", contacts);

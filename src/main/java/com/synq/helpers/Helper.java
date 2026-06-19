@@ -1,19 +1,23 @@
 package com.synq.helpers;
 
+
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.dialect.unique.CreateTableUniqueDelegate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Component;
 
 
 @Slf4j
+@Component
 public class Helper {
 
-    public static String getEmailOfLoggedInUser(Authentication authentication)
+    @Value("${app.base-url}")
+    private  String  baseUrl;
+
+    public  String getEmailOfLoggedInUser(Authentication authentication)
     {
         var authenticationPrincipal =  authentication.getPrincipal();
         if(authenticationPrincipal instanceof OAuth2User)
@@ -42,9 +46,9 @@ public class Helper {
         }
         return authentication.getName();
     }
-    public static String getLinkForEmailVerification(String token)
+    public  String getLinkForEmailVerification(String token)
     {
-        String link = "http://localhost:8081/auth/verify-email?token="+token;
+        String link = baseUrl+"/auth/verify-email?token="+token;
         return  link;
     }
 }

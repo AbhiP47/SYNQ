@@ -19,11 +19,13 @@ public  class EmailServiceImpl implements EmailService {
 
 
     private final JavaMailSender mailSender;
+    private  final Helper helper;
 
 
 
-    public EmailServiceImpl(JavaMailSender mailSender ) {
+    public EmailServiceImpl(JavaMailSender mailSender, Helper helper) {
         this.mailSender = mailSender;
+        this.helper = helper;
     }
 
     @Value("${app.mail.from}")
@@ -36,7 +38,7 @@ public  class EmailServiceImpl implements EmailService {
             message.setTo(to);
             message.setSubject(subject);
             message.setText(body);
-            message.setFrom(Helper.getEmailOfLoggedInUser(authentication));
+            message.setFrom(helper.getEmailOfLoggedInUser(authentication));
             mailSender.send(message);
             logger.info("Email sent successfully to {}", to);
         } catch (Exception e) {

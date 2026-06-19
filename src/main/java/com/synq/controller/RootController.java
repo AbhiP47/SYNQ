@@ -18,6 +18,9 @@ public class RootController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private Helper helper;
+
     /**
      * This method acts as a global interceptor to provide user data to all Thymeleaf/HTML views.
      * It runs before every @RequestMapping method in your application.
@@ -37,7 +40,7 @@ public class RootController {
 
         try {
             // 2. Extract identify (Email/Username) using your helper
-            String username = Helper.getEmailOfLoggedInUser(authentication);
+            String username = helper.getEmailOfLoggedInUser(authentication);
             log.info("Processing metadata for logged-in user: {}", username);
 
             // 3. Fetch user details from DB

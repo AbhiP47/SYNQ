@@ -29,12 +29,14 @@ public class ContactController {
     private final ContactService contactService;
     private final UserService userService;
     private final ImageService imageService;
+    private final Helper helper;
 
-    public ContactController(ContactService contactService , UserService userService , ImageService imageService)
+    public ContactController(ContactService contactService , UserService userService , ImageService imageService, Helper helper)
     {
         this.contactService = contactService;
         this.userService = userService;
         this.imageService = imageService;
+        this.helper = helper;
     }
 
     @RequestMapping("/add")
@@ -58,7 +60,7 @@ public class ContactController {
             return "user/add_contact";
         }
 
-        String userName = Helper.getEmailOfLoggedInUser(authentication);
+        String userName = helper.getEmailOfLoggedInUser(authentication);
         User user = userService.getUserByEmail(userName);
 
         String fileURL = imageService.uploadImage(contactForm.getContactImage());
@@ -91,7 +93,7 @@ public class ContactController {
             @RequestParam(value = "direction" , defaultValue = "asc") String direction ,
             Model model , Authentication authentication)
     {
-        String username = Helper.getEmailOfLoggedInUser(authentication);
+        String username = helper.getEmailOfLoggedInUser(authentication);
         User user = userService.getUserByEmail(username);
 
         Page<Contact> contacts = contactService.getByUser(user , page , size , sortBy , direction);
@@ -113,7 +115,7 @@ public class ContactController {
 
         log.info("field {} keyword {}", contactSearchForm.getField(), contactSearchForm.getValue());
 
-        var user = userService.getUserByEmail(Helper.getEmailOfLoggedInUser(authentication));
+        var user = userService.getUserByEmail(helper.getEmailOfLoggedInUser(authentication));
 
         Page<Contact> pageContact = null;
         if (contactSearchForm.getField().equalsIgnoreCase("name")) {
@@ -140,7 +142,7 @@ public class ContactController {
 
     @GetMapping("/delete/{id}")
     public String deleteContact(@PathVariable("id") String id, Authentication authentication , HttpSession session) {
-        String loggedInUserEmail = Helper.getEmailOfLoggedInUser(authentication);
+        String loggedInUserEmail = helper.getEmailOfLoggedInUser(authentication);
         User currentUser = userService.getUserByEmail(loggedInUserEmail);
 
         Contact contact = contactService.getById(id);
