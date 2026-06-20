@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
         log.info("Verification email sent to : {}",user.getEmail());
         user.setEmailToken(emailToken);
         logger.info(user.getProvider().toString());
+
         return  userRepo.save(user);
     }
 
