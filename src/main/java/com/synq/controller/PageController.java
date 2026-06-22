@@ -115,4 +115,11 @@ public class PageController {
         return "redirect:/register";
     }
 
+    @GetMapping("/about")
+    public String about()
+    {
+        log.info("Initiating About page");
+        return "about";
+    }
+
 }
