@@ -122,4 +122,11 @@ public class PageController {
         return "about";
     }
 
+    @GetMapping("/services")
+    public String services()
+    {
+        log.info("Initiating Services page");
+        return "services";
+    }
+
 }
