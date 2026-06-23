@@ -46,12 +46,6 @@ public class PageController {
         return "services";
     }
 
-    @GetMapping("/contact")
-    public String contact()
-    {
-        System.out.println("contact");
-        return "contact";
-    }
 
     @GetMapping("/login")
     public String login()
@@ -128,5 +122,13 @@ public class PageController {
         log.info("Initiating Services page");
         return "services";
     }
+
+    @GetMapping("/contacts")
+    public String contact()
+    {
+        log.info("Initiating Contact page");
+        return "contact";
+    }
+
 
 }
